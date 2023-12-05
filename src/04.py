@@ -44,7 +44,7 @@ def part1(lines: List[str]):
     """
     total = 0
     for line in lines:
-        game_id, numbers = line.split(": ")
+        _, numbers = line.split(": ")
         win_nums, draw_nums = map(
             lambda x: set(map(int, x.split())), numbers.split(" | ")
         )
@@ -110,7 +110,7 @@ def part2(lines: List[str]):
     """
     cards = [1] * len(lines)
     for i, line in enumerate(lines):
-        game_id, numbers = line.split(": ")
+        _, numbers = line.split(": ")
         win_nums, draw_nums = map(
             lambda x: set(map(int, x.split())), numbers.split(" | ")
         )

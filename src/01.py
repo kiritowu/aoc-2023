@@ -2,6 +2,7 @@ from typing import List
 
 from aocd import get_data
 
+
 def part1(lines: List[str]) -> int:
     """
     The newly-improved calibration document consists of lines of text;

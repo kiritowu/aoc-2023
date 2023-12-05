@@ -38,7 +38,9 @@ def part1(lines: List[str]):
     What is the sum of all of the part numbers in the engine schematic?
     """
     # Find number then check for any symbol its perimeter
-    symbols = set(["+", "-", "*", "/", "$", "#", "@", "&", "%", "^", "!", "~", "="])
+    symbols = set(
+        ["+", "-", "*", "/", "$", "#", "@", "&", "%", "^", "!", "~", "="]
+    )
     result = []
     for i, line in enumerate(lines):
         num = ""
@@ -53,17 +55,23 @@ def part1(lines: List[str]):
                 left_idx = max(j - len(num) - 1, 0)
                 right_idx = min(j + 1, len(line))
                 # Check top
-                if i > 0 and len(set(lines[i - 1][left_idx:right_idx]) & symbols) > 0:
+                if (
+                    i > 0
+                    and len(set(lines[i - 1][left_idx:right_idx]) & symbols)
+                    > 0
+                ):
                     result.append(int(num))
                 # Check bottom
                 elif (
                     i < len(lines) - 1
-                    and len(set(lines[i + 1][left_idx:right_idx]) & symbols) > 0
+                    and len(set(lines[i + 1][left_idx:right_idx]) & symbols)
+                    > 0
                 ):
                     result.append(int(num))
                 # Check left and right
                 elif (
-                    lines[i][left_idx] in symbols or lines[i][right_idx - 1] in symbols
+                    lines[i][left_idx] in symbols
+                    or lines[i][right_idx - 1] in symbols
                 ):
                     result.append(int(num))
             num = ""
@@ -120,14 +128,17 @@ def part2(lines):
                 right_idx = min(j + 1, len(line))
                 # Check top
                 if i > 0 and symbol in lines[i - 1][left_idx:right_idx]:
-                    asterisk_coords[(i - 1, lines[i - 1].index("*", left_idx))].append(
-                        int(num)
-                    )
+                    asterisk_coords[
+                        (i - 1, lines[i - 1].index("*", left_idx))
+                    ].append(int(num))
                 # Check bottom
-                elif i < len(lines) - 1 and symbol in lines[i + 1][left_idx:right_idx]:
-                    asterisk_coords[(i + 1, lines[i + 1].index("*", left_idx))].append(
-                        int(num)
-                    )
+                elif (
+                    i < len(lines) - 1
+                    and symbol in lines[i + 1][left_idx:right_idx]
+                ):
+                    asterisk_coords[
+                        (i + 1, lines[i + 1].index("*", left_idx))
+                    ].append(int(num))
                 # Check left and right
                 elif lines[i][left_idx] == symbol:
                     asterisk_coords[(i, left_idx)].append(int(num))
