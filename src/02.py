@@ -1,6 +1,8 @@
 import functools
 from typing import List
 
+from aocd import get_data
+
 
 def part1(lines: List[str], max_red=12, max_green=13, max_blue=14):
     """
@@ -117,8 +119,6 @@ def part2(lines: List[str]):
 
 
 if __name__ == "__main__":
-    with open("../inputs/02.txt", "r", encoding="utf-8") as f:
-        inputs = f.read().split("\n")
-
-    print(part1(inputs))
-    print(part2(inputs))
+    data = get_data(year=2023, day=2).splitlines()
+    print(part1(data))
+    print(part2(data))

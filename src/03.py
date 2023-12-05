@@ -1,6 +1,8 @@
 from typing import List
 from collections import defaultdict
 
+from aocd import get_data
+
 
 def part1(lines: List[str]):
     """
@@ -142,7 +144,6 @@ def part2(lines):
 
 
 if __name__ == "__main__":
-    with open("../inputs/03.txt", "r", encoding="utf-8") as f:
-        inputs = f.read().splitlines()
-    print(part1(inputs))
-    print(part2(inputs))
+    data = get_data(year=2023, day=3).splitlines()
+    print(part1(data))
+    print(part2(data))

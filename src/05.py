@@ -43,6 +43,7 @@ class PuzzleDict(defaultdict):
         return smallest
 
     def __getitem__(self, x):
+        """Return element if x in range, else return identity"""
         key = self.smallest_key(x)
         dest, length = self.source_map[key]
         if key < x < (key + length):
@@ -55,6 +56,7 @@ class PuzzleDict(defaultdict):
     def parse_range(
         self, seed_ranges: List[Tuple[int, int]]
     ) -> List[Tuple[int, int]]:  # [(start, end), ...]
+        """Given a list of seed ranges, return a list of mapped seed ranges"""
         mapped_seed_ranges = []
         while seed_ranges:
             seed_start, seed_end = seed_ranges.pop()
@@ -121,6 +123,6 @@ def part2(lines: List[int]) -> int:
 
 
 if __name__ == "__main__":
-    data = get_data(year=2023, day=5)
-    print(part1(data.splitlines()))
-    print(part2(data.splitlines()))
+    data = get_data(year=2023, day=5).splitlines()
+    print(part1(data))
+    print(part2(data))
