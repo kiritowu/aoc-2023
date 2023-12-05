@@ -19,7 +19,7 @@ PUZZLE = namedtuple(
 )
 
 
-class PuzzleMap(defaultdict):
+class PuzzleDict(defaultdict):
     def __init__(self, ranges: Tuple[int, int, int], *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -52,6 +52,33 @@ class PuzzleMap(defaultdict):
             # if x is not in range, return identity
             return x
 
+    def parse_range(
+        self, seed_ranges: List[Tuple[int, int]]
+    ) -> List[Tuple[int, int]]:  # [(start, end), ...]
+        mapped_seed_ranges = []
+        while seed_ranges:
+            seed_start, seed_end = seed_ranges.pop()
+
+            for source, (dest, length) in self.source_map.items():
+                # split the ranges
+                ovlp_start = max(seed_start, source)
+                ovlp_end = min(seed_end, source + length)
+
+                if ovlp_start < ovlp_end:
+                    mapped_seed_ranges.append(
+                        (ovlp_start - source + dest, ovlp_end - source + dest)
+                    )
+
+                    if seed_start < ovlp_start:
+                        seed_ranges.append((seed_start, ovlp_start))
+                    if ovlp_end < seed_end:
+                        seed_ranges.append((ovlp_end, seed_end))
+                    break
+            else:
+                mapped_seed_ranges.append((seed_start, seed_end))
+
+        return mapped_seed_ranges
+
 
 def parse_input(lines: List[str]) -> PUZZLE:
     seeds = list(map(int, lines[0].split("seeds: ")[-1].split()))
@@ -61,9 +88,9 @@ def parse_input(lines: List[str]) -> PUZZLE:
         if not line:
             continue
         elif line.endswith("map:"):
-            id = line.split("map:")[0].strip()
+            key = line.split("map:")[0].strip()
         else:
-            ranges[id].append(tuple(map(int, line.split())))
+            ranges[key].append(tuple(map(int, line.split())))
 
     return PUZZLE(seeds, *ranges.values())
 
@@ -72,7 +99,7 @@ def part1(lines: List[str]) -> int:
     puzzle = parse_input(lines)
     seeds = puzzle[0]
     for ranges in puzzle[1:]:
-        mapper = PuzzleMap(ranges)
+        mapper = PuzzleDict(ranges)
         seeds = [mapper[s] for s in seeds]
 
     return min(seeds)
@@ -80,18 +107,17 @@ def part1(lines: List[str]) -> int:
 
 def part2(lines: List[int]) -> int:
     puzzle = parse_input(lines)
-    seed_ranges = puzzle[0]
-    seeds = []
-    for i in range(len(seed_ranges) // 2):
-        # out of memory
-        for j in range(seed_ranges[i], seed_ranges[i] + seed_ranges[i + 1]):
-            seeds.append(j)
+    seeds = puzzle[0]
+    seed_ranges = [
+        (start, start + length) for start, length in zip(seeds[::2], seeds[1::2])
+    ]
 
     for ranges in puzzle[1:]:
-        mapper = PuzzleMap(ranges)
-        seeds = [mapper[s] for s in seeds]
+        mapper = PuzzleDict(ranges)
+        seed_ranges = mapper.parse_range(seed_ranges)
 
-    return min(seeds)
+    print(seed_ranges)
+    return min([seed[0] for seed in seed_ranges])
 
 
 if __name__ == "__main__":
