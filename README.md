@@ -1,6 +1,6 @@
 # Advent of Code 2023
 
-This repo consist of my solution for [Advent of Code 2023](https://adventofcode.com/2023).
+This repo consist of my solution for [Advent of Code 2023](https://adventofcode.com/2023) using Python3.
 
 ### Getting Started
 
