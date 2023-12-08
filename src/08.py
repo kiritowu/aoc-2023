@@ -45,7 +45,7 @@ def part1(lines: List[str], start: str = "AAA", end: str = "ZZZ") -> int:
     puzzle: Dict[str, List[str]] = {}
     for line in lines[2:]:
         key, paths = line.split(" = ")
-        puzzle[key] = paths.replace("(", "").replace(")", "").split(", ")
+        puzzle[key] = paths.strip("()").split(", ")
 
     state = start
     while True:
